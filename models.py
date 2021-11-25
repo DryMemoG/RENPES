@@ -1,6 +1,8 @@
 #/usr/bin/python3
 from enum import unique
+from operator import truediv
 from flask_login import UserMixin
+from flask_sqlalchemy.model import Model
 from sqlalchemy.sql.schema import ForeignKey
 from sqlalchemy import UniqueConstraint
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -169,4 +171,49 @@ class Usuario(db.Model):
         return Usuario.query.get(id_usuario)
     def get_by_email(email):
         return Usuario.query.get(email)
+    def get_all():
+        return Usuario.query.all()
     
+class Maestro(db.Model):
+    __tablename__ = 'tbl_maestro'
+    id_maestro = db.Column(db.Integer, primary_key = True)
+    nombres = db.Column(db.String(100), nullable=False)
+    apellidos = db.Column(db.String(75), nullable = False)
+    id_usuario = db.Column(db.Integer, db.ForeignKey('tbl_usuario.id_usuario'), nullable=False)
+    usuario = db.relationship('Usuario', backref=db.backref('tbl_usuario', lazy=True))
+    
+    def __repr__(self):
+        return '<Maestro: %r>' %self.nombres + ' '+self.apellidos
+    
+    def save(self):
+        if not self.id_maestro:
+            db.session.add(self)
+        db.session.commit()
+    
+    @staticmethod
+    def get_by_id(id_maestro):
+        return Maestro.query.get(id_maestro)
+    def get_all():
+        return Maestro.query.all()
+    
+class Unidad(db.Model):
+    __tablename__ = 'tbl_unidad'
+    id_unidad = db.Column(db.Integer, primary_key = True)
+    unidad = db.Column(db.Integer, nullable = False)
+    descripcion = db.Column(db.String(25), nullable = True)
+    
+    def __repr__(self):
+        return '<Unidad: %r>' %self.unidad
+    
+    def save(self):
+        if not self.id_unidad:
+            db.session.add(self)
+        db.session.commit()
+    
+    @staticmethod
+    def get_by_id(id_unidad):
+        return Unidad.query.get(id_unidad)
+    def get_all():
+        return Unidad.query.all()
+    
+class 
