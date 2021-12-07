@@ -245,7 +245,7 @@ class Asignacion(db.Model):
     __tablename__ = 'tbl_asignacion'
     id_asignacion = db.Column(db.Integer, primary_key=True)
     id_curso =db.Column(db.Integer, db.ForeignKey('tbl_curso.id_curso'), nullable =False)
-    curso = db.relatioship('Curso', backref=db.backref('tbl_curso', lazy=True))
+    curso = db.relationship('Curso', backref=db.backref('tbl_curso', lazy=True))
     id_alumno = db.Column(db.Integer, db.ForeignKey('tbl_alumno.id_alumno'), nullable= False)
     alumno = db.relationship('Alumno', backref=db.backref('tbl_alumno', lazy=True))
     id_unidad = db.Column(db.Integer, db.ForeignKey('tbl_unidad.id_unidad'), nullable=False)
@@ -307,7 +307,7 @@ class PagoMaestro(db.Model):
     id_maestro = db.Column(db.Integer, db.ForeignKey('tbl_maestro.id_maestro'), nullable = False)
     maestro = db.relationship('Maestro', backref=db.backref('tbl_maestro', lazy=True))
     fecha =db.Column(db.DateTime, nullable=False,default=datetime.utcnow)
-    monto = db.Column(db.FLoat, nullable=False)
+    monto = db.Column(db.Float, nullable=False)
     descripcion = db.Column(db.Text, nullable=False)
     
     def __repr__(self):
