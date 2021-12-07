@@ -216,4 +216,114 @@ class Unidad(db.Model):
     def get_all():
         return Unidad.query.all()
     
-class 
+class Curso(db.Model):
+    __tablename__ = 'tbl_curso'
+    id_curso = db.Column(db.Integer, primary_key=True)
+    nombre_curso = db.Column(db.String(50), nullable=False)
+    descripcion = db.Column(db.String(100), nullable=True)
+    id_grado =db.Column(db.Integer,db.ForeignKey('tbl_grado.id_grado'), nullable=False)
+    grado = db.relationship('Grado', backref=db.backref('tbl_grado',lazy=True))
+    id_maestro = db.Column(db.Integer, db.ForeignKey('tbl_maestro.id_maestro'), nullable=False)
+    maestro = db.relationship('Maestro', backref=db.backref('tbl_maestro', lazy=True))
+    is_XC = db.Column(db.Boolean, nullable = False, default=False)
+    
+    def __repr__(self):
+        return '<Curso: %r>' %self.nombre_curso
+        
+    def save(self):
+        if not self.id_curso:
+            db.session.add(self)
+        db.session.commit()
+    
+    @staticmethod
+    def get_by_id(id_curso):
+        return Curso.query.get(id_curso)
+    def get_all():
+        return Curso.query.all()
+    
+class Asignacion(db.Model):
+    __tablename__ = 'tbl_asignacion'
+    id_asignacion = db.Column(db.Integer, primary_key=True)
+    id_curso =db.Column(db.Integer, db.ForeignKey('tbl_curso.id_curso'), nullable =False)
+    curso = db.relatioship('Curso', backref=db.backref('tbl_curso', lazy=True))
+    id_alumno = db.Column(db.Integer, db.ForeignKey('tbl_alumno.id_alumno'), nullable= False)
+    alumno = db.relationship('Alumno', backref=db.backref('tbl_alumno', lazy=True))
+    id_unidad = db.Column(db.Integer, db.ForeignKey('tbl_unidad.id_unidad'), nullable=False)
+    unidad = db.relationship('Unidad', backref=db.backref('tbl_unidad', lazy=True))
+    nota =db.Column(db.Integer, nullable=False, default=0)
+    anotaciones =db.Column(db.Text, nullable = True)
+    
+    def __repr__(self):
+        return '<Asignacion: %r>' %self.nota
+    
+    def save(self):
+        if not self.id_asignacion:
+            db.session.add(self)
+        db.session.commit()
+    
+    @staticmethod
+    def get_by_id(id_asignacion):
+        return Asignacion.query.get(id_asignacion)
+    def get_by_alumno(id_alumno):
+        return Asignacion.query.get(id_alumno)
+    def get_by_unidad(id_unidad):
+        return Asignacion.query.get(id_unidad)
+    def get_by_curso(id_curso):
+        return Asignacion.query.get(id_curso)
+    def get_all():
+        return Asignacion.query.all()
+    
+class Pagos(db.Model):
+    __tablename__ = 'tbl_pagos'
+    id_pago = db.Column(db.Integer, primary_key = True)
+    correlativo = db.Column(db.String(25), nullable = False, unique = True)
+    monto = db.Column(db.Float, nullable = False)
+    fecha = db.Column(db.DateTime, nullable = False, default=datetime.utcnow)
+    id_alumno = db.Column(db.Integer, db.ForeignKey('tbl_alumno.id_alumno'), nullable=False)
+    alumno = db.relationship('Alumno', backref=db.backref('tbl_alumno', lazy=True))
+    descripcion = db.Column(db.Text, nullable=False)
+    
+    def __repr__(self):
+        return '<Pago: %r>' %self.correlativo
+    def save(self):
+        if not self.id_pago:
+            db.session.add(self)
+        db.session.commit()
+    
+    @staticmethod
+    def get_by_id(id_pago):
+        return Pagos.query.get(id_pago)
+    def get_by_correlativo(correlativo):
+        return Pagos.query.get(correlativo)
+    def get_by_alumno(id_alumno):
+        return Pagos.query.get(id_alumno)
+    def get_all():
+        return Pagos.query.all()
+    
+class PagoMaestro(db.Model):
+    __tablename__ ='tbl_pagomaestro'
+    id_pagomaestro = db.Column(db.Integer, primary_key=True)
+    correlativo = db.Column(db.String(25), nullable=False, unique=False)
+    id_maestro = db.Column(db.Integer, db.ForeignKey('tbl_maestro.id_maestro'), nullable = False)
+    maestro = db.relationship('Maestro', backref=db.backref('tbl_maestro', lazy=True))
+    fecha =db.Column(db.DateTime, nullable=False,default=datetime.utcnow)
+    monto = db.Column(db.FLoat, nullable=False)
+    descripcion = db.Column(db.Text, nullable=False)
+    
+    def __repr__(self):
+        return '<Pago: %r>' %self.correlativo
+    def save(self):
+        if not self.id_pagomaestro:
+            db.session.add(self)
+        db.session.commit()
+    
+    @staticmethod
+    def get_by_id(id_pagomaestro):
+        return PagoMaestro.query.get(id_pagomaestro)
+    def get_by_maestro(id_maestro):
+        return PagoMaestro.query.get(id_maestro)
+    def get_by_correlativo(correlativo):
+        return PagoMaestro.query.get(correlativo)
+    def get_all():
+        return PagoMaestro.query.all()
+
