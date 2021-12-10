@@ -109,7 +109,7 @@ class Seccion(db.Model):
     @staticmethod
     def get_all():
         return Seccion.query.all()
-
+#Carreras: Las carreras aprobadas por el MINEDUC en GT, Ej. Perito, Bachillerato, en los demás grados se tomará carrera como primaria y Básico
 class Carrera(db.Model):
     __tablename__ = 'tbl_carrera'
     id_carrera = db.Column(db.Integer, primary_key=True)
@@ -195,7 +195,7 @@ class Maestro(db.Model):
         return Maestro.query.get(id_maestro)
     def get_all():
         return Maestro.query.all()
-    
+#Generalmente se trabajan 4 bloques o unidades, Pero se pueden modificar al gusto del centro educativo o del país en el que se esté trabajando
 class Unidad(db.Model):
     __tablename__ = 'tbl_unidad'
     id_unidad = db.Column(db.Integer, primary_key = True)
@@ -215,7 +215,8 @@ class Unidad(db.Model):
         return Unidad.query.get(id_unidad)
     def get_all():
         return Unidad.query.all()
-    
+#Las materias por defecto curriculares, en el caso de las extra Curriculares se deberán marcar como is_XC para agregarlo en el listado de notas.
+#sin embargo en el consolidado final no aparecerán los cursos extra curriculares
 class Curso(db.Model):
     __tablename__ = 'tbl_curso'
     id_curso = db.Column(db.Integer, primary_key=True)
