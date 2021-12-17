@@ -12,3 +12,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 from models import *
 
+@app.route("/")
+def index():
+    return render_template("base.html")
+
